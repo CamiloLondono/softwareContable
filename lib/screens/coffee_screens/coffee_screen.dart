@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:softwarecontable/screens/coffee_screens/coffee_screem2.dart';
 
 class CoffeeScreen extends StatefulWidget {
   const CoffeeScreen({super.key});
@@ -14,6 +15,14 @@ class _CafeScreenState extends State<CoffeeScreen> {
   String? terreno;
   int? pendiente;
   String? drenaje;
+  bool? coberturaMaleza;
+  String? metodoTrazado;
+  String otroMetodo = '';
+  int? profundidadHoyo;
+  int? largoHoyo;
+  int? anchoHoyo;
+  double? distanciaEntrePlantas;
+  double? distanciaEntreSurcos;
 
   @override
   Widget build(BuildContext context) {
@@ -218,17 +227,197 @@ class _CafeScreenState extends State<CoffeeScreen> {
                   },
                 ),
                 SizedBox(height: 30),
+                // Paso 5
+                Text(
+                  '¿Cobertura de maleza > 40%?',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                ListTile(
+                  title: Text('Sí'),
+                  leading: Radio<bool>(
+                    value: true,
+                    groupValue: coberturaMaleza,
+                    onChanged: (value) {
+                      setState(() {
+                        coberturaMaleza = value;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: Text('No'),
+                  leading: Radio<bool>(
+                    value: false,
+                    groupValue: coberturaMaleza,
+                    onChanged: (value) {
+                      setState(() {
+                        coberturaMaleza = value;
+                      });
+                    },
+                  ),
+                ),
+                coberturaMaleza != null
+                    ? Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        coberturaMaleza == true
+                            ? 'Recomendación: Limpieza con guadaña + herbicida'
+                            : 'Recomendación: Limpieza manual',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.green[700],
+                        ),
+                      ),
+                    )
+                    : SizedBox.shrink(),
+                // Paso 6
+                SizedBox(height: 30),
+                Text(
+                  'Selección del método de trazado:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                ...[
+                  'Cuadrado',
+                  'Rectangular',
+                  'Triángulos',
+                  'Tres bolillos',
+                  'Curvas a nivel',
+                  'Otro',
+                ].map(
+                  (metodo) => RadioListTile<String>(
+                    title: Text(metodo),
+                    value: metodo,
+                    groupValue: metodoTrazado,
+                    onChanged: (value) {
+                      setState(() {
+                        metodoTrazado = value;
+                        otroMetodo = ''; // Reiniciar si escoge algo diferente
+                      });
+                    },
+                  ),
+                ),
+                if (metodoTrazado == 'Otro')
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Especificar otro método',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          otroMetodo = value;
+                        });
+                      },
+                    ),
+                  ),
+                // Paso 7
+                SizedBox(height: 30),
+                Text(
+                  'Dimensiones de los hoyos para el ahoyado (en centímetros):',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Profundidad (cm)',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        profundidadHoyo = int.tryParse(value);
+                      });
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Largo (cm)',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        largoHoyo = int.tryParse(value);
+                      });
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Ancho (cm)',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        anchoHoyo = int.tryParse(value);
+                      });
+                    },
+                  ),
+                ),
+                //Paso 7
+                SizedBox(height: 30),
+                Text(
+                  '¿Qué distancia se utilizará para la siembra? (en metros)',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Distancia entre plantas (m)',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        distanciaEntrePlantas = double.tryParse(value);
+                      });
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Distancia entre surcos (m)',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        distanciaEntreSurcos = double.tryParse(value);
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),
-
           // Botón fijo en la esquina inferior derecha
           Positioned(
             bottom: 16,
             right: 16,
             child: ElevatedButton(
               onPressed: () {
-                // Lógica del siguiente paso
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CoffeeScreen2(),
+                  ),
+                );
               },
               child: Text('Siguiente'),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
-import 'screens/coffee_screen.dart';
-import 'screens/orange_screen.dart';
+import 'screens/coffee_screens/coffee_screen.dart';
+import 'screens/orange_screens/orange_screen.dart';
 
 void main() {
   runApp(SoilAnalysisApp());
