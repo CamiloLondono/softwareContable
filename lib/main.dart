@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
-import 'screens/analysis_screen.dart';
+import 'screens/coffee_screen.dart';
+import 'screens/orange_screen.dart';
 
 void main() {
   runApp(SoilAnalysisApp());
 }
 
 class SoilAnalysisApp extends StatelessWidget {
+  const SoilAnalysisApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Análisis de Suelo',
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -18,7 +22,8 @@ class SoilAnalysisApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(),
-        '/analysis': (context) => AnalysisScreen(),
+        '/analysis_coffee': (context) => CoffeeScreen(),
+        '/analysis_orange': (context) => OrangeScreen(),
       },
     );
   }

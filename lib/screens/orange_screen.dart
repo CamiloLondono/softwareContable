@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AnalysisScreen extends StatefulWidget {
-  const AnalysisScreen({super.key});
+class OrangeScreen extends StatefulWidget {
+  const OrangeScreen({super.key});
 
   @override
-  State<AnalysisScreen> createState() => _AnalysisScreenState();
+  State<OrangeScreen> createState() => _OrangeScreenState();
 }
 
-class _AnalysisScreenState extends State<AnalysisScreen> {
+class _OrangeScreenState extends State<OrangeScreen> {
   bool? desbalance;
   bool correctionNutritional = false;
   bool correctionPh = false;

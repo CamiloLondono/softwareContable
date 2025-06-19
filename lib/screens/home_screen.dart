@@ -10,11 +10,23 @@ class HomeScreen extends StatelessWidget {
         title: Text('Inicio - Análisis de Suelo'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/analysis');
-          },
-          child: Text('Iniciar Análisis'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/analysis_coffee');
+              },
+              child: Text('Análisis Café'),
+            ),
+            SizedBox(width: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/analysis_orange');
+              },
+              child: Text('Análisis Naranja'),
+            ),
+          ],
         ),
       ),
     );
