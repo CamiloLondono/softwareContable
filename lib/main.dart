@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
-import 'screens/coffee_screens/coffee_screen.dart';
-import 'screens/orange_screens/orange_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:softwarecontable/screens/coffee_screens/coffee_screen.dart';
+import 'package:softwarecontable/providers/analysis_provider_coffee.dart';
 
 void main() {
-  runApp(SoilAnalysisApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AnalysisProviderCoffee()),
+        // Aquí puedes agregar otros providers si tienes más adelante
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class SoilAnalysisApp extends StatelessWidget {
-  const SoilAnalysisApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Software Contable',
       debugShowCheckedModeBanner: false,
-      title: 'Análisis de Suelo',
       theme: ThemeData(
-        primarySwatch: Colors.green,
         useMaterial3: true,
+        colorSchemeSeed: Colors.green,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomeScreen(),
-        '/analysis_coffee': (context) => CoffeeScreen(),
-        '/analysis_orange': (context) => OrangeScreen(),
-      },
+      home: const CoffeeScreen(),
     );
   }
 }

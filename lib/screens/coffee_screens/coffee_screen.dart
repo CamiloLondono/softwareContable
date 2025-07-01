@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:softwarecontable/screens/coffee_screens/coffee_screem2.dart';
+import 'package:softwarecontable/utils/constants.dart';
 
 class CoffeeScreen extends StatefulWidget {
   const CoffeeScreen({super.key});
@@ -23,25 +24,27 @@ class _CafeScreenState extends State<CoffeeScreen> {
   int? anchoHoyo;
   double? distanciaEntrePlantas;
   double? distanciaEntreSurcos;
+  Map<String, bool> metodoLimpieza = {
+    'Guadaña': false,
+    'Herbicida': false,
+    'Asadon': false,
+    'Machete': false,
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Paso 1: Análisis de Suelo')),
+      appBar: AppBar(title: const Text('Paso 1: Análisis de Suelo')),
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+            padding: const EdgeInsets.fromLTRB(kDefaultPadding, kDefaultPadding, kDefaultPadding, 80),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Paso 1
-                Text(
-                  '¿Hay desbalances o pH fuera de rango?',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                Text('¿Hay desbalances o pH fuera de rango?', style: kTituloPaso),
                 ListTile(
-                  title: Text('Sí'),
+                  title: const Text('Sí'),
                   leading: Radio<bool>(
                     value: true,
                     groupValue: desbalance,
@@ -53,7 +56,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                   ),
                 ),
                 ListTile(
-                  title: Text('No'),
+                  title: const Text('No'),
                   leading: Radio<bool>(
                     value: false,
                     groupValue: desbalance,
@@ -66,9 +69,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                 ),
                 if (desbalance == true) ...[
                   CheckboxListTile(
-                    title: Text(
-                      'Corrección nutricional (Deficiencia de nutrientes)',
-                    ),
+                    title: const Text('Corrección nutricional (Deficiencia de nutrientes)'),
                     value: correctionNutritional,
                     onChanged: (value) {
                       setState(() {
@@ -77,9 +78,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                     },
                   ),
                   CheckboxListTile(
-                    title: Text(
-                      'Corrección de pH (Ajuste de acidez o alcalinidad)',
-                    ),
+                    title: const Text('Corrección de pH (Ajuste de acidez o alcalinidad)'),
                     value: correctionPh,
                     onChanged: (value) {
                       setState(() {
@@ -88,21 +87,9 @@ class _CafeScreenState extends State<CoffeeScreen> {
                     },
                   ),
                 ],
-                const SizedBox(height: 30),
-                // Paso 2
-                Text(
-                  'Identificación del tipo de terreno:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                ...[
-                  'Franco',
-                  'Arenoso',
-                  'Arcilloso',
-                  'Limoso',
-                  'Pedregoso',
-                  'Franco-arenoso',
-                  'Franco-arcilloso',
-                ].map(
+                const SizedBox(height: kDefaultPadding),
+                Text('Identificación del tipo de terreno:', style: kTituloPaso),
+                ...tiposTerreno.map(
                   (tipo) => RadioListTile<String>(
                     title: Text(tipo),
                     value: tipo,
@@ -114,126 +101,45 @@ class _CafeScreenState extends State<CoffeeScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 30),
-                // Paso 3
-                Text(
-                  'Evaluación de la pendiente del terreno:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                const SizedBox(height: kDefaultPadding),
+                Text('Evaluación de la pendiente del terreno:', style: kTituloPaso),
+                ...[
+                  'Plana (0-3%)',
+                  'Suave (4-8%)',
+                  'Moderada (9-15%)',
+                  'Fuerte (16-25%)',
+                  'Muy fuerte (>25%)',
+                  'No evaluado',
+                ].asMap().entries.map(
+                  (entry) => RadioListTile<int>(
+                    title: Text(entry.value),
+                    value: entry.key + 1,
+                    groupValue: pendiente,
+                    onChanged: (value) {
+                      setState(() {
+                        pendiente = value;
+                      });
+                    },
+                  ),
                 ),
-                RadioListTile<int>(
-                  title: Text('Plana (0-3%)'),
-                  value: 1,
-                  groupValue: pendiente,
-                  onChanged: (value) {
-                    setState(() {
-                      pendiente = value;
-                    });
-                  },
+                const SizedBox(height: kDefaultPadding),
+                Text('Verificación del drenaje:', style: kTituloPaso),
+                ...['Bueno', 'Moderado', 'Deficiente', 'No evaluado'].map(
+                  (value) => RadioListTile<String>(
+                    title: Text(value),
+                    value: value,
+                    groupValue: drenaje,
+                    onChanged: (val) {
+                      setState(() {
+                        drenaje = val;
+                      });
+                    },
+                  ),
                 ),
-                RadioListTile<int>(
-                  title: Text('Suave (4-8%)'),
-                  value: 2,
-                  groupValue: pendiente,
-                  onChanged: (value) {
-                    setState(() {
-                      pendiente = value;
-                    });
-                  },
-                ),
-                RadioListTile<int>(
-                  title: Text('Moderada (9-15%)'),
-                  value: 3,
-                  groupValue: pendiente,
-                  onChanged: (value) {
-                    setState(() {
-                      pendiente = value;
-                    });
-                  },
-                ),
-                RadioListTile<int>(
-                  title: Text('Fuerte (16-25%)'),
-                  value: 4,
-                  groupValue: pendiente,
-                  onChanged: (value) {
-                    setState(() {
-                      pendiente = value;
-                    });
-                  },
-                ),
-                RadioListTile<int>(
-                  title: Text('Muy fuerte (>25%)'),
-                  value: 5,
-                  groupValue: pendiente,
-                  onChanged: (value) {
-                    setState(() {
-                      pendiente = value;
-                    });
-                  },
-                ),
-                RadioListTile<int>(
-                  title: Text('No evaluado'),
-                  value: 6,
-                  groupValue: pendiente,
-                  onChanged: (value) {
-                    setState(() {
-                      pendiente = value;
-                    });
-                  },
-                ),
-                SizedBox(height: 30),
-                // Paso 4
-                Text(
-                  'Verificación del drenaje:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                RadioListTile<String>(
-                  title: Text('Bueno'),
-                  value: 'Bueno',
-                  groupValue: drenaje,
-                  onChanged: (value) {
-                    setState(() {
-                      drenaje = value;
-                    });
-                  },
-                ),
-                RadioListTile<String>(
-                  title: Text('Moderado'),
-                  value: 'Moderado',
-                  groupValue: drenaje,
-                  onChanged: (value) {
-                    setState(() {
-                      drenaje = value;
-                    });
-                  },
-                ),
-                RadioListTile<String>(
-                  title: Text('Deficiente'),
-                  value: 'Deficiente',
-                  groupValue: drenaje,
-                  onChanged: (value) {
-                    setState(() {
-                      drenaje = value;
-                    });
-                  },
-                ),
-                RadioListTile<String>(
-                  title: Text('No evaluado'),
-                  value: 'No evaluado',
-                  groupValue: drenaje,
-                  onChanged: (value) {
-                    setState(() {
-                      drenaje = value;
-                    });
-                  },
-                ),
-                SizedBox(height: 30),
-                // Paso 5
-                Text(
-                  '¿Cobertura de maleza > 40%?',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const SizedBox(height: kDefaultPadding),
+                Text('¿Cobertura de maleza > 40%?', style: kTituloPaso),
                 ListTile(
-                  title: Text('Sí'),
+                  title: const Text('Sí'),
                   leading: Radio<bool>(
                     value: true,
                     groupValue: coberturaMaleza,
@@ -245,7 +151,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                   ),
                 ),
                 ListTile(
-                  title: Text('No'),
+                  title: const Text('No'),
                   leading: Radio<bool>(
                     value: false,
                     groupValue: coberturaMaleza,
@@ -256,35 +162,42 @@ class _CafeScreenState extends State<CoffeeScreen> {
                     },
                   ),
                 ),
-                coberturaMaleza != null
-                    ? Padding(
+                if (coberturaMaleza != null) ...[
+                  if (coberturaMaleza == true) ...[
+                    const SizedBox(height: 8),
+                    Text('¿Cómo realizará la limpieza?', style: kSubtitulo),
+                    ...metodoLimpieza.keys.map(
+                      (key) => CheckboxListTile(
+                        title: Text(key == 'Asadon'
+                            ? 'Limpieza manual con asadón'
+                            : key == 'Machete'
+                                ? 'Limpieza manual con machete'
+                                : key),
+                        value: metodoLimpieza[key],
+                        onChanged: (value) {
+                          setState(() {
+                            metodoLimpieza[key] = value ?? false;
+                          });
+                        },
+                      ),
+                    ),
+                  ] else ...[
+                    Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        coberturaMaleza == true
-                            ? 'Recomendación: Limpieza con guadaña + herbicida'
-                            : 'Recomendación: Limpieza manual',
+                        kRecomendacionManual,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Colors.green[700],
+                          color: kSuccessColor,
                         ),
                       ),
-                    )
-                    : SizedBox.shrink(),
-                // Paso 6
-                SizedBox(height: 30),
-                Text(
-                  'Selección del método de trazado:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                ...[
-                  'Cuadrado',
-                  'Rectangular',
-                  'Triángulos',
-                  'Tres bolillos',
-                  'Curvas a nivel',
-                  'Otro',
-                ].map(
+                    ),
+                  ],
+                ],
+                const SizedBox(height: kDefaultPadding),
+                Text('Selección del método de trazado:', style: kTituloPaso),
+                ...['Cuadrado', 'Rectangular', 'Triángulos', 'Tres bolillos', 'Curvas a nivel', 'Otro'].map(
                   (metodo) => RadioListTile<String>(
                     title: Text(metodo),
                     value: metodo,
@@ -292,16 +205,16 @@ class _CafeScreenState extends State<CoffeeScreen> {
                     onChanged: (value) {
                       setState(() {
                         metodoTrazado = value;
-                        otroMetodo = ''; // Reiniciar si escoge algo diferente
+                        otroMetodo = '';
                       });
                     },
                   ),
                 ),
                 if (metodoTrazado == 'Otro')
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Especificar otro método',
                         border: OutlineInputBorder(),
                       ),
@@ -312,17 +225,13 @@ class _CafeScreenState extends State<CoffeeScreen> {
                       },
                     ),
                   ),
-                // Paso 7
-                SizedBox(height: 30),
-                Text(
-                  'Dimensiones de los hoyos para el ahoyado (en centímetros):',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const SizedBox(height: kDefaultPadding),
+                Text('Dimensiones de los hoyos para el ahoyado (en centímetros):', style: kTituloPaso),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Profundidad (cm)',
                       border: OutlineInputBorder(),
                     ),
@@ -337,7 +246,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Largo (cm)',
                       border: OutlineInputBorder(),
                     ),
@@ -352,7 +261,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Ancho (cm)',
                       border: OutlineInputBorder(),
                     ),
@@ -363,19 +272,13 @@ class _CafeScreenState extends State<CoffeeScreen> {
                     },
                   ),
                 ),
-                //Paso 7
-                SizedBox(height: 30),
-                Text(
-                  '¿Qué distancia se utilizará para la siembra? (en metros)',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const SizedBox(height: kDefaultPadding),
+                Text('¿Qué distancia se utilizará para la siembra? (en metros)', style: kTituloPaso),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
-                    keyboardType: TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: InputDecoration(
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
                       labelText: 'Distancia entre plantas (m)',
                       border: OutlineInputBorder(),
                     ),
@@ -389,11 +292,9 @@ class _CafeScreenState extends State<CoffeeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
-                    keyboardType: TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Distancia entre surcos (m)',
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Distancia entre calles (m)',
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (value) {
@@ -406,10 +307,9 @@ class _CafeScreenState extends State<CoffeeScreen> {
               ],
             ),
           ),
-          // Botón fijo en la esquina inferior derecha
           Positioned(
-            bottom: 16,
-            right: 16,
+            bottom: kDefaultPadding,
+            right: kDefaultPadding,
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -419,7 +319,7 @@ class _CafeScreenState extends State<CoffeeScreen> {
                   ),
                 );
               },
-              child: Text('Siguiente'),
+              child: const Text('Siguiente'),
             ),
           ),
         ],
